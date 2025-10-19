@@ -1,16 +1,29 @@
 {
   "name": "@arqetype/pm2",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "main": "./out/main/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "electron-vite dev",
+    "start": "electron-vite preview",
+    "build": "electron-vite build"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.18.0",
+  "dependencies": {
+    "@electron-toolkit/preload": "^3.0.2",
+    "@electron-toolkit/utils": "^4.0.0"
+  },
   "devDependencies": {
-    "electron": "^38.3.0"
+    "@electron-toolkit/tsconfig": "^2.0.0",
+    "@types/node": "^24.8.1",
+    "electron": "^38.3.0",
+    "electron-vite": "^4.0.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.10"
+  },
+  "packageManager": "pnpm@10.18.0",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "electron",
+      "esbuild"
+    ]
   }
 }
