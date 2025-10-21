@@ -1,7 +1,11 @@
+/// <reference types="./window.d.ts" />
+
 import { contextBridge } from "electron";
 import { electronAPI } from "@electron-toolkit/preload";
 
-const api = {};
+const api = {
+  getVersionInfo: () => "v1.1",
+};
 
 if (process.contextIsolated) {
   try {
@@ -11,8 +15,6 @@ if (process.contextIsolated) {
     console.error(error);
   }
 } else {
-  // @ts-ignore (define in dts)
   window.electron = electronAPI;
-  // @ts-ignore (define in dts)
   window.api = api;
 }
