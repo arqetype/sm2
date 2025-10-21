@@ -1,7 +1,9 @@
 "use strict";
 const electron = require("electron");
 const preload = require("@electron-toolkit/preload");
-const api = {};
+const api = {
+  getVersionInfo: () => "v1.1"
+};
 if (process.contextIsolated) {
   try {
     electron.contextBridge.exposeInMainWorld("electron", preload.electronAPI);
