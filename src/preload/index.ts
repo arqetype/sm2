@@ -1,16 +1,16 @@
 /// <reference types="./window.d.ts" />
 
-import { contextBridge } from "electron";
-import { electronAPI } from "@electron-toolkit/preload";
+import { contextBridge } from 'electron';
+import { electronAPI } from '@electron-toolkit/preload';
 
 const api = {
-  getVersionInfo: () => "v1.1",
+  getVersionInfo: () => 'v1.1'
 };
 
 if (process.contextIsolated) {
   try {
-    contextBridge.exposeInMainWorld("electron", electronAPI);
-    contextBridge.exposeInMainWorld("api", api);
+    contextBridge.exposeInMainWorld('electron', electronAPI);
+    contextBridge.exposeInMainWorld('api', api);
   } catch (error) {
     console.error(error);
   }
