@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Button } from "./components/ui/button";
 
 export function App() {
   const [count, setCount] = useState(0);
@@ -7,7 +8,7 @@ export function App() {
 
   return (
     <div>
-      <button onClick={() => increment()}>Increment count</button>
+      <Button onClick={() => increment()}>Increment count</Button>
       <p>Count: {count}</p>
       <p>{window.api.getVersionInfo()}</p>
     </div>
