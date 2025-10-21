@@ -6,9 +6,5 @@
     "src/preload/**/*",
     "src/preload",
     "src/preload/**/*.d.ts"
-  ],
-  "compilerOptions": {
-    "composite": true,
-    "types": ["electron-vite/node"]
-  }
+  ]
 }
