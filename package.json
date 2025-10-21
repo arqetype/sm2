@@ -5,7 +5,41 @@
   "scripts": {
     "dev": "electron-vite dev",
     "start": "electron-vite preview",
-    "build": "electron-vite build"
+    "build": "electron-vite build",
+    "build:mac": "pnpm build && electron-builder --mac",
+    "build:win": "pnpm build && electron-builder --win",
+    "build:linux": "pnpm build && electron-builder --linux",
+    "build:all": "pnpm build && electron-builder --mac --win --linux"
+  },
+  "build": {
+    "appId": "com.arqetype.pm2",
+    "productName": "pm2 - flashcards app",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "out/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "target": [
+        "dmg"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "linux": {
+      "target": [
+        "deb",
+        "rpm",
+        "pacman"
+      ],
+      "category": "Development"
+    }
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
@@ -26,6 +60,7 @@
     "@types/react-dom": "^19.2.2",
     "@vitejs/plugin-react": "^5.0.4",
     "electron": "^38.3.0",
+    "electron-builder": "^26.0.12",
     "electron-vite": "^4.0.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
