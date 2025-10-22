@@ -1,10 +1,10 @@
 /// <reference types="./window.d.ts" />
 
-import { contextBridge } from 'electron';
+import { contextBridge, ipcRenderer } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
 
 const api = {
-  getVersionInfo: () => 'v1.1'
+  ping: () => ipcRenderer.send('ping')
 };
 
 if (process.contextIsolated) {

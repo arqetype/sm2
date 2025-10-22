@@ -1,16 +1,20 @@
 import { BrowserWindow, shell } from 'electron';
 import { is } from '@electron-toolkit/utils';
 import { join } from 'node:path';
+import { WINDOW_CONFIG } from '../../config';
 
 export function createMainWindow() {
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: WINDOW_CONFIG.DEFAULT_WIDTH,
+    height: WINDOW_CONFIG.DEFAULT_HEIGHT,
+    minWidth: WINDOW_CONFIG.MIN_WIDTH,
+    minHeight: WINDOW_CONFIG.MIN_HEIGHT,
     show: false,
     autoHideMenuBar: true,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
+      sandbox: false,
+      devTools: is.dev
     }
   });
 
