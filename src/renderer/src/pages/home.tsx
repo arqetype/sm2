@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/store/app';
+import { SidebarButton } from '@/components/sidebar/sidebar-button';
 
 export function HomePage() {
   const [count, setCount] = useState(0);
@@ -22,6 +23,7 @@ export function HomePage() {
           <Button onClick={cycleTheme} variant="outline">
             Theme: {theme}
           </Button>
+          <SidebarButton />
         </div>
         <div>
           <Button onClick={() => increment()}>Increment count</Button>
