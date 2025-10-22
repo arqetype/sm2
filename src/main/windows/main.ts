@@ -13,7 +13,9 @@ export function createMainWindow() {
     autoHideMenuBar: true,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false,
+      sandbox: true,
+      contextIsolation: true,
+      nodeIntegration: false,
       devTools: is.dev
     }
   });
