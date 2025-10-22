@@ -2,11 +2,10 @@ logs/
 build/
 node_modules/
 dist/
+out/
 
 .env.*
 .env
 !.env.example
 
 .DS_STORE
-
-out

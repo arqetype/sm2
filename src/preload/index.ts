@@ -1,20 +1,14 @@
 /// <reference types="./window.d.ts" />
 
-import { contextBridge } from 'electron';
-import { electronAPI } from '@electron-toolkit/preload';
+import { contextBridge, ipcRenderer } from 'electron';
 
 const api = {
-  getVersionInfo: () => 'v1.1'
+  ping: () => ipcRenderer.send('ping')
 };
 
-if (process.contextIsolated) {
-  try {
-    contextBridge.exposeInMainWorld('electron', electronAPI);
-    contextBridge.exposeInMainWorld('api', api);
-  } catch (error) {
-    console.error(error);
-  }
-} else {
-  window.electron = electronAPI;
+try {
+  contextBridge.exposeInMainWorld('api', api);
+} catch (error) {
+  console.error('[Preload] Failed to expose API:', error);
   window.api = api;
 }
