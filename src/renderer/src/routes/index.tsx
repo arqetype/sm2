@@ -1,9 +1,14 @@
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { useTheme } from '@/store/app';
-import { SidebarButton } from '@/components/sidebar/sidebar-button';
+import { Button } from '../components/ui/button';
+import { useTheme } from '../store/app';
+import { SidebarButton } from '../components/sidebar/sidebar-button';
+import { createFileRoute } from '@tanstack/react-router';
 
-export function HomePage() {
+export const Route = createFileRoute('/')({
+  component: HomePage
+});
+
+function HomePage() {
   const [count, setCount] = useState(0);
   const { theme, setTheme } = useTheme();
 
