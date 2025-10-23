@@ -6,8 +6,6 @@
     "src/preload/**/*",
     "src/preload",
     "src/preload/**/*.d.ts",
-    "src/config/**/*",
-    "src/lib/**/*",
-    "src/types/**/*"
+    "src/_shared/**/*"
   ]
 }

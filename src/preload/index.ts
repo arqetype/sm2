@@ -1,4 +1,4 @@
-/// <reference types="./window.d.ts" />
+/// <reference types="../_shared/types/window.d.ts" />
 
 import { contextBridge, ipcRenderer } from 'electron';
 
