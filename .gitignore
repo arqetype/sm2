@@ -12,3 +12,4 @@ out/
 
 # TanStack Router
 src/renderer/src/routeTree.gen.ts
+.tanstack/tmp

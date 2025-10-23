@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from '../components/ui/button';
-import { useTheme } from '../store/app';
+import { useTheme } from '../hooks/use-theme';
 import { SidebarButton } from '../components/sidebar/sidebar-button';
 import { createFileRoute } from '@tanstack/react-router';
 
