@@ -15,7 +15,7 @@ const gitignorePath = path.resolve(__dirname, '.gitignore');
 export default [
   includeIgnoreFile(gitignorePath),
   {
-    ignores: ['out/**', 'dist/**', '*.config.ts']
+    ignores: ['out/**', 'dist/**']
   },
   js.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
