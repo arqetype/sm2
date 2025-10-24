@@ -11,6 +11,13 @@ export function createMainWindow() {
     minHeight: WINDOW_CONFIG.MIN_HEIGHT,
     show: false,
     autoHideMenuBar: true,
+    titleBarStyle: 'hiddenInset',
+    transparent: true,
+    vibrancy: 'under-window',
+    visualEffectState: 'followWindow',
+    roundedCorners: true,
+    ...(process.platform !== 'darwin' ? { titleBarOverlay: true } : {}),
+    trafficLightPosition: { x: 12, y: 12 },
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: true,
