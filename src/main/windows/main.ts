@@ -1,7 +1,7 @@
 import { BrowserWindow, shell } from 'electron';
 import { is } from '@electron-toolkit/utils';
 import { join } from 'node:path';
-import { WINDOW_CONFIG } from '../../config';
+import { WINDOW_CONFIG } from '../config/app';
 
 export function createMainWindow() {
   const mainWindow = new BrowserWindow({
