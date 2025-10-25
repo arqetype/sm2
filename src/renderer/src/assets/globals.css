@@ -142,4 +142,12 @@
     scrollbar-width: thin;
     scrollbar-color: var(--border) transparent;
   }
+
+  .drag-window {
+    app-region: drag;
+  }
+
+  .not-drag-window {
+    app-region: no-drag;
+  }
 }
