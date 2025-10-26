@@ -36,6 +36,8 @@
   --sidebar-accent-foreground: oklch(0.4352 0.0432 279.5); /* text */
   --sidebar-border: oklch(0.8083 0.0174 271.2); /* surface1 */
   --sidebar-ring: oklch(0.8083 0.0174 271.2); /* surface1 */
+
+  --tab-curve: 9px;
 }
 
 .dark {
@@ -122,32 +124,5 @@
 
   .bg-vibrancy {
     @apply bg-background/60;
-  }
-
-  ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-  }
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  ::-webkit-scrollbar-thumb {
-    border: 1px solid transparent;
-    border-radius: var(--radius);
-    background-clip: padding-box;
-    background: var(--border);
-  }
-
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: var(--border) transparent;
-  }
-
-  .drag-window {
-    app-region: drag;
-  }
-
-  .not-drag-window {
-    app-region: no-drag;
   }
 }

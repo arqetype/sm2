@@ -18,7 +18,7 @@ export function createMainWindow() {
     visualEffectState: 'followWindow',
     roundedCorners: true,
     ...(process.platform !== 'darwin' ? { titleBarOverlay: true } : {}),
-    trafficLightPosition: { x: 12, y: 12 },
+    trafficLightPosition: { x: 12, y: 14 },
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: true,

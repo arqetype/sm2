@@ -8,7 +8,12 @@ export function TitlebarSidebarToggle() {
   const handleClick = () => toggleSidebar();
 
   return (
-    <Button onClick={handleClick} size="icon-sm" className="not-drag-window" variant="ghost">
+    <Button
+      onClick={handleClick}
+      size="icon-sm"
+      className="not-drag-window mt-0.5 mr-4 ml-3"
+      variant="ghost"
+    >
       {open ? <SidebarCloseIcon /> : <SidebarOpenIcon />}
     </Button>
   );
