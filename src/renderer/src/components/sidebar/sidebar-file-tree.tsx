@@ -15,24 +15,110 @@ import {
   RefreshCcwIcon
 } from 'lucide-react';
 import { Button } from '../ui/button';
+import { useTabs } from '@/hooks/use-tabs';
+import { FilePreviewTab, type FilePreviewData } from '@/components/navigation/tab-file-preview';
 
-const data = {
-  tree: [
-    ['app', ['api', ['hello', ['route.ts']], 'page.tsx', 'layout.tsx', ['blog', ['page.tsx']]]],
-    ['components', ['ui', 'button.tsx', 'card.tsx'], 'header.tsx', 'footer.tsx'],
-    ['components', ['ui', 'button.tsx', 'card.tsx'], 'header.tsx', 'footer.tsx'],
-    ['components', ['ui', 'button.tsx', 'card.tsx'], 'header.tsx', 'footer.tsx'],
-    ['components', ['ui', 'button.tsx', 'card.tsx'], 'header.tsx', 'footer.tsx'],
-    ['lib', ['util.ts']],
-    ['public', 'favicon.ico', 'vercel.svg'],
-    '.eslintrc.json',
-    '.gitignore',
-    'next.config.js',
-    'tailwind.config.js',
-    'package.json',
-    'README.md'
-  ]
-};
+type TreeNode =
+  | { type: 'file'; name: string }
+  | { type: 'folder'; name: string; children: TreeNode[] };
+
+const tree: TreeNode[] = [
+  {
+    type: 'folder',
+    name: 'app',
+    children: [
+      {
+        type: 'folder',
+        name: 'api',
+        children: [
+          { type: 'folder', name: 'hello', children: [{ type: 'file', name: 'route.ts' }] },
+          { type: 'file', name: 'page.tsx' },
+          { type: 'file', name: 'layout.tsx' },
+          { type: 'folder', name: 'blog', children: [{ type: 'file', name: 'page.tsx' }] }
+        ]
+      }
+    ]
+  },
+  {
+    type: 'folder',
+    name: 'components',
+    children: [
+      {
+        type: 'folder',
+        name: 'ui',
+        children: [
+          { type: 'file', name: 'button.tsx' },
+          { type: 'file', name: 'card.tsx' }
+        ]
+      },
+      { type: 'file', name: 'header.tsx' },
+      { type: 'file', name: 'footer.tsx' }
+    ]
+  },
+  {
+    type: 'folder',
+    name: 'components',
+    children: [
+      {
+        type: 'folder',
+        name: 'ui',
+        children: [
+          { type: 'file', name: 'button.tsx' },
+          { type: 'file', name: 'card.tsx' }
+        ]
+      },
+      { type: 'file', name: 'header.tsx' },
+      { type: 'file', name: 'footer.tsx' }
+    ]
+  },
+  {
+    type: 'folder',
+    name: 'components',
+    children: [
+      {
+        type: 'folder',
+        name: 'ui',
+        children: [
+          { type: 'file', name: 'button.tsx' },
+          { type: 'file', name: 'card.tsx' }
+        ]
+      },
+      { type: 'file', name: 'header.tsx' },
+      { type: 'file', name: 'footer.tsx' }
+    ]
+  },
+  {
+    type: 'folder',
+    name: 'components',
+    children: [
+      {
+        type: 'folder',
+        name: 'ui',
+        children: [
+          { type: 'file', name: 'button.tsx' },
+          { type: 'file', name: 'card.tsx' }
+        ]
+      },
+      { type: 'file', name: 'header.tsx' },
+      { type: 'file', name: 'footer.tsx' }
+    ]
+  },
+  { type: 'folder', name: 'lib', children: [{ type: 'file', name: 'util.ts' }] },
+  {
+    type: 'folder',
+    name: 'public',
+    children: [
+      { type: 'file', name: 'favicon.ico' },
+      { type: 'file', name: 'vercel.svg' }
+    ]
+  },
+  { type: 'file', name: '.eslintrc.json' },
+  { type: 'file', name: '.gitignore' },
+  { type: 'file', name: 'next.config.js' },
+  { type: 'file', name: 'tailwind.config.js' },
+  { type: 'file', name: 'package.json' },
+  { type: 'file', name: 'README.md' }
+];
 
 export function SidebarFileTree() {
   return (
@@ -53,7 +139,7 @@ export function SidebarFileTree() {
       <SidebarGroup className="flex-1 overflow-y-auto">
         <SidebarGroupContent>
           <SidebarMenu>
-            {data.tree.map((item, index) => (
+            {tree.map((item, index) => (
               <Tree key={index} item={item} />
             ))}
           </SidebarMenu>
@@ -63,41 +149,66 @@ export function SidebarFileTree() {
   );
 }
 
-// TODO: fix those eslint thingies
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function Tree({ item }: { item: string | any[] }) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const [name, ...items] = Array.isArray(item) ? item : [item];
+function Tree({ item, path = '' }: { item: TreeNode; path?: string }) {
+  const { addTab, tabs, setActiveTab } = useTabs();
 
-  if (!items.length) {
+  const currentPath = path ? `${path}/${item.name}` : item.name;
+
+  const handleFileClick = () => {
+    const existingTab = tabs.find(
+      tab => tab.data && (tab.data as FilePreviewData).path === currentPath
+    );
+
+    if (existingTab) {
+      setActiveTab(existingTab.id);
+      return;
+    }
+
+    // Otherwise, create a new tab
+    const fileData: FilePreviewData = {
+      path: currentPath,
+      name: item.name,
+      type: 'file'
+    };
+
+    addTab({
+      title: item.name,
+      component: FilePreviewTab,
+      closable: true,
+      data: fileData
+    });
+  };
+
+  if (item.type === 'file') {
     return (
       <SidebarMenuButton
-        isActive={name === 'button.tsx'}
+        isActive={false}
         className="data-[active=true]:bg-transparent"
+        onClick={handleFileClick}
       >
         <FileIcon />
-        {name}
+        {item.name}
       </SidebarMenuButton>
     );
   }
+
   return (
     <SidebarMenuItem>
       <Collapsible
         className="group/collapsible [&[data-state=open]>button>svg:first-child]:rotate-90"
-        defaultOpen={name === 'components' || name === 'ui'}
+        defaultOpen={item.name === 'components' || item.name === 'ui'}
       >
         <CollapsibleTrigger asChild>
           <SidebarMenuButton>
             <ChevronRightIcon className="transition-transform" />
             <FolderIcon />
-            {name}
+            {item.name}
           </SidebarMenuButton>
         </CollapsibleTrigger>
         <CollapsibleContent>
           <SidebarMenuSub>
-            {items.map((subItem, index) => (
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-              <Tree key={index} item={subItem} />
+            {item.children.map((subItem, index) => (
+              <Tree key={index} item={subItem} path={currentPath} />
             ))}
           </SidebarMenuSub>
         </CollapsibleContent>

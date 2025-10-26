@@ -1,14 +1,16 @@
 import type { ComponentType } from 'react';
 
-export interface Tab {
+export interface Tab<TData = unknown> {
   id: string;
   title: string;
-  component: ComponentType<TabComponentProps>;
+  component: ComponentType<TabComponentProps<TData>>;
   closable?: boolean;
+  data?: TData;
 }
 
-export interface TabComponentProps {
+export interface TabComponentProps<TData = unknown> {
   tabId: string;
+  data?: TData;
 }
 
 export interface TabStore {
@@ -16,9 +18,9 @@ export interface TabStore {
   activeTab: string | null;
   defaultTabComponent: ComponentType<TabComponentProps>;
   setActiveTab: (id: string) => void;
-  addTab: (tab: Omit<Tab, 'id'> & { id?: string }) => string;
+  addTab: <TData = unknown>(tab: Omit<Tab<TData>, 'id'> & { id?: string }) => string;
   removeTab: (id: string) => boolean;
-  updateTab: (id: string, updates: Partial<Omit<Tab, 'id'>>) => boolean;
+  updateTab: <TData = unknown>(id: string, updates: Partial<Omit<Tab<TData>, 'id'>>) => boolean;
   reorderTabs: (fromId: string, toId: string) => boolean;
   nextTab: () => void;
   prevTab: () => void;

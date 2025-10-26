@@ -37,11 +37,11 @@ export const createTabStore = (options: CreateTabStoreOptions = {}) => {
         return '';
       }
 
-      const newTab: Tab = {
+      const newTab = {
         id: newId,
         closable: true,
         ...tab
-      };
+      } as Tab;
 
       set(state => ({
         tabs: [...state.tabs, newTab],
@@ -75,7 +75,7 @@ export const createTabStore = (options: CreateTabStoreOptions = {}) => {
       if (!tabs.some(t => t.id === id)) return false;
 
       set(state => ({
-        tabs: state.tabs.map(t => (t.id === id ? { ...t, ...updates } : t))
+        tabs: state.tabs.map(t => (t.id === id ? ({ ...t, ...updates } as Tab) : t))
       }));
 
       return true;

@@ -14,7 +14,7 @@ export function TabsPanels({ errorFallback }: TabsPanelsProps) {
 
   const defaultRenderPanel = useCallback((tab: Tab) => {
     const Component = tab.component;
-    return Component ? <Component tabId={tab.id} /> : null;
+    return Component ? <Component tabId={tab.id} data={tab.data} /> : null;
   }, []);
 
   const render = renderPanel || defaultRenderPanel;
