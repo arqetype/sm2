@@ -5,7 +5,8 @@ import { ErrorBoundaryProvider } from './providers/error';
 import { RouterProvider } from './providers/router';
 import { QueryProvider } from './providers/query';
 
-import './assets/globals.css';
+import './assets/styles/globals.css';
+import './assets/styles/base.css';
 
 window.addEventListener('unhandledrejection', event => {
   console.error('Unhandled promise rejection:', event.reason);
