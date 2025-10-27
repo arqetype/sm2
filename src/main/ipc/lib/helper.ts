@@ -4,7 +4,7 @@ import type {
   IpcOutput,
   InvokableChannels,
   SendOnlyChannels
-} from '../../../_shared/types/ipc';
+} from '../../../_shared/types/ipc/utils';
 
 export function handleIpc<T extends InvokableChannels>(
   channel: T,

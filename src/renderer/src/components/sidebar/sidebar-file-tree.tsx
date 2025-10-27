@@ -7,127 +7,37 @@ import {
   SidebarMenuItem,
   SidebarMenuSub
 } from '@/components/ui/sidebar';
-import {
-  ChevronRightIcon,
-  FileIcon,
-  FolderIcon,
-  ListCollapseIcon,
-  RefreshCcwIcon
-} from 'lucide-react';
-import { Button } from '../ui/button';
+import { ChevronRightIcon, FileIcon, ListCollapseIcon, RefreshCcwIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useTabs } from '@/hooks/use-tabs';
-import { FilePreviewTab, type FilePreviewData } from '@/components/navigation/tab-file-preview';
-
-type TreeNode =
-  | { type: 'file'; name: string }
-  | { type: 'folder'; name: string; children: TreeNode[] };
-
-const tree: TreeNode[] = [
-  {
-    type: 'folder',
-    name: 'app',
-    children: [
-      {
-        type: 'folder',
-        name: 'api',
-        children: [
-          { type: 'folder', name: 'hello', children: [{ type: 'file', name: 'route.ts' }] },
-          { type: 'file', name: 'page.tsx' },
-          { type: 'file', name: 'layout.tsx' },
-          { type: 'folder', name: 'blog', children: [{ type: 'file', name: 'page.tsx' }] }
-        ]
-      }
-    ]
-  },
-  {
-    type: 'folder',
-    name: 'components',
-    children: [
-      {
-        type: 'folder',
-        name: 'ui',
-        children: [
-          { type: 'file', name: 'button.tsx' },
-          { type: 'file', name: 'card.tsx' }
-        ]
-      },
-      { type: 'file', name: 'header.tsx' },
-      { type: 'file', name: 'footer.tsx' }
-    ]
-  },
-  {
-    type: 'folder',
-    name: 'components',
-    children: [
-      {
-        type: 'folder',
-        name: 'ui',
-        children: [
-          { type: 'file', name: 'button.tsx' },
-          { type: 'file', name: 'card.tsx' }
-        ]
-      },
-      { type: 'file', name: 'header.tsx' },
-      { type: 'file', name: 'footer.tsx' }
-    ]
-  },
-  {
-    type: 'folder',
-    name: 'components',
-    children: [
-      {
-        type: 'folder',
-        name: 'ui',
-        children: [
-          { type: 'file', name: 'button.tsx' },
-          { type: 'file', name: 'card.tsx' }
-        ]
-      },
-      { type: 'file', name: 'header.tsx' },
-      { type: 'file', name: 'footer.tsx' }
-    ]
-  },
-  {
-    type: 'folder',
-    name: 'components',
-    children: [
-      {
-        type: 'folder',
-        name: 'ui',
-        children: [
-          { type: 'file', name: 'button.tsx' },
-          { type: 'file', name: 'card.tsx' }
-        ]
-      },
-      { type: 'file', name: 'header.tsx' },
-      { type: 'file', name: 'footer.tsx' }
-    ]
-  },
-  { type: 'folder', name: 'lib', children: [{ type: 'file', name: 'util.ts' }] },
-  {
-    type: 'folder',
-    name: 'public',
-    children: [
-      { type: 'file', name: 'favicon.ico' },
-      { type: 'file', name: 'vercel.svg' }
-    ]
-  },
-  { type: 'file', name: '.eslintrc.json' },
-  { type: 'file', name: '.gitignore' },
-  { type: 'file', name: 'next.config.js' },
-  { type: 'file', name: 'tailwind.config.js' },
-  { type: 'file', name: 'package.json' },
-  { type: 'file', name: 'README.md' }
-];
+import { FilePreviewTab } from '@/components/navigation/tab-file-preview';
+import { useIpcMutation, useIpcQuery } from '@/hooks/use-ipc-query';
+import type { TreeNode, FilePreviewData } from '../../../../_shared/types/file-tree';
 
 export function SidebarFileTree() {
+  const openDirectory = useIpcMutation('file-tree:open-directory');
+  const scanDirectory = useIpcQuery(
+    'file-tree:scan-directory',
+    openDirectory.data && 'path' in openDirectory.data ? openDirectory.data.path : null
+  );
+
   return (
     <>
       <SidebarMenuItem className="flex items-center justify-evenly">
-        <Button size="sm" variant={'outline'}>
+        <Button
+          size="sm"
+          variant={'outline'}
+          onClick={() => openDirectory.mutate()}
+          disabled={openDirectory.isPending}
+        >
           Open another folder
         </Button>
-        <Button size="icon-sm">
+        <Button
+          size="icon-sm"
+          disabled={
+            scanDirectory.isPending || scanDirectory.isRefetching || scanDirectory.isLoading
+          }
+        >
           <RefreshCcwIcon />
           <span className="sr-only">Refresh the files</span>
         </Button>
@@ -136,12 +46,12 @@ export function SidebarFileTree() {
           <span className="sr-only">Collapse all</span>
         </Button>
       </SidebarMenuItem>
-      <SidebarGroup className="flex-1 overflow-y-auto">
+      <SidebarGroup className="flex-1 overflow-y-auto overflow-x-hidden">
         <SidebarGroupContent>
           <SidebarMenu>
-            {tree.map((item, index) => (
-              <Tree key={index} item={item} />
-            ))}
+            {scanDirectory.data &&
+              !('error' in scanDirectory.data) &&
+              scanDirectory.data.tree.map((item, index) => <Tree key={index} item={item} />)}
           </SidebarMenu>
         </SidebarGroupContent>
       </SidebarGroup>
@@ -164,7 +74,6 @@ function Tree({ item, path = '' }: { item: TreeNode; path?: string }) {
       return;
     }
 
-    // Otherwise, create a new tab
     const fileData: FilePreviewData = {
       path: currentPath,
       name: item.name,
@@ -183,30 +92,26 @@ function Tree({ item, path = '' }: { item: TreeNode; path?: string }) {
     return (
       <SidebarMenuButton
         isActive={false}
-        className="data-[active=true]:bg-transparent"
+        className="overflow-hidden mr-0 pr-0"
         onClick={handleFileClick}
       >
         <FileIcon />
-        {item.name}
+        <span>{item.name}</span>
       </SidebarMenuButton>
     );
   }
 
   return (
-    <SidebarMenuItem>
-      <Collapsible
-        className="group/collapsible [&[data-state=open]>button>svg:first-child]:rotate-90"
-        defaultOpen={item.name === 'components' || item.name === 'ui'}
-      >
+    <SidebarMenuItem className="mr-0">
+      <Collapsible className="[&[data-state=open]>button>svg:first-child]:rotate-90">
         <CollapsibleTrigger asChild>
-          <SidebarMenuButton>
+          <SidebarMenuButton className="overflow-hidden mr-0 pr-0">
             <ChevronRightIcon className="transition-transform" />
-            <FolderIcon />
-            {item.name}
+            <span>{item.name}</span>
           </SidebarMenuButton>
         </CollapsibleTrigger>
         <CollapsibleContent>
-          <SidebarMenuSub>
+          <SidebarMenuSub className="mr-0 pr-0">
             {item.children.map((subItem, index) => (
               <Tree key={index} item={subItem} path={currentPath} />
             ))}
