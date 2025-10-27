@@ -6,7 +6,7 @@ export interface IpcChannels {
     output: { path: string } | { error: string };
   };
   'file-tree:scan-directory': {
-    input: string;
+    input: string | null;
     output: { tree: TreeNode[] } | { error: string };
   };
 }

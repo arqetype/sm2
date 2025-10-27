@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import { basename, extname, join, normalize, resolve, sep } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { TreeNode } from '../../_shared/types/file-tree';
-import { Stats } from 'node:fs';
+import { Dirent, Stats } from 'node:fs';
 
 type VerifyDirectoryReturn = { success: true } | { success: false; message: string };
 
@@ -34,7 +34,7 @@ const SCAN_OPTIONS: {
   maxFilesPerDirectory: number;
   maxConcurrentReads: number;
   allowedExtensions: string[] | 'all';
-  ignoredPatterns: string[];
+  ignoredPatterns: RegExp[];
   followSymlinks: boolean;
   timeoutMs: number;
 } = {
@@ -42,7 +42,7 @@ const SCAN_OPTIONS: {
   maxFilesPerDirectory: 10000,
   maxConcurrentReads: 50,
   allowedExtensions: 'all',
-  ignoredPatterns: ['node_modules', '.git', '.svn', 'dist', 'build', '__pycache__', '.*'],
+  ignoredPatterns: [/node_modules/, /^\.git$/, /^\.svn$/, /dist/, /build/, /__pycache__/, /^\..*/],
   followSymlinks: false,
   timeoutMs: 30000
 };
@@ -78,20 +78,19 @@ class Semaphore {
 const readSemaphore = new Semaphore(SCAN_OPTIONS.maxConcurrentReads);
 
 function hasAllowedExtension(fileName: string): boolean {
-  const ext = extname(fileName).toLowerCase();
   if (SCAN_OPTIONS.allowedExtensions === 'all') return true;
+  const ext = extname(fileName).toLowerCase();
   return SCAN_OPTIONS.allowedExtensions.map(e => e.toLowerCase()).includes(ext);
 }
 
 function isIgnored(relativePathFromRoot: string): boolean {
   const segments = relativePathFromRoot.split(sep).filter(Boolean);
-  const set = new Set(SCAN_OPTIONS.ignoredPatterns);
-  return segments.some(seg => set.has(seg));
+  return segments.some(seg => SCAN_OPTIONS.ignoredPatterns.some(pattern => pattern.test(seg)));
 }
 
 async function resolveEntry(
   fullPath: string,
-  dirent: import('fs').Dirent
+  dirent: Dirent
 ): Promise<{ isDir: boolean; isFile: boolean; targetPath: string } | null> {
   if (dirent.isSymbolicLink()) {
     if (!SCAN_OPTIONS.followSymlinks) {

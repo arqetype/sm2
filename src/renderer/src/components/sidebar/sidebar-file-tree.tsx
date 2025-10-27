@@ -7,33 +7,19 @@ import {
   SidebarMenuItem,
   SidebarMenuSub
 } from '@/components/ui/sidebar';
-import {
-  ChevronRightIcon,
-  FileIcon,
-  FolderIcon,
-  ListCollapseIcon,
-  RefreshCcwIcon
-} from 'lucide-react';
+import { ChevronRightIcon, FileIcon, ListCollapseIcon, RefreshCcwIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTabs } from '@/hooks/use-tabs';
-import { FilePreviewTab, type FilePreviewData } from '@/components/navigation/tab-file-preview';
-import { useIpcMutation } from '@/hooks/use-ipc-query';
-import { useEffect } from 'react';
-import type { TreeNode } from '../../../../_shared/types/file-tree';
+import { FilePreviewTab } from '@/components/navigation/tab-file-preview';
+import { useIpcMutation, useIpcQuery } from '@/hooks/use-ipc-query';
+import type { TreeNode, FilePreviewData } from '../../../../_shared/types/file-tree';
 
 export function SidebarFileTree() {
   const openDirectory = useIpcMutation('file-tree:open-directory');
-  const scanDirectory = useIpcMutation('file-tree:scan-directory');
-
-  useEffect(() => {
-    if (openDirectory.data && !('error' in openDirectory.data)) {
-      scanDirectory.mutate(openDirectory.data.path);
-    }
-  }, [openDirectory.data]);
-
-  useEffect(() => {
-    console.log(scanDirectory.data);
-  }, [scanDirectory.data]);
+  const scanDirectory = useIpcQuery(
+    'file-tree:scan-directory',
+    openDirectory.data && 'path' in openDirectory.data ? openDirectory.data.path : null
+  );
 
   return (
     <>
@@ -46,7 +32,12 @@ export function SidebarFileTree() {
         >
           Open another folder
         </Button>
-        <Button size="icon-sm" disabled={scanDirectory.isPending}>
+        <Button
+          size="icon-sm"
+          disabled={
+            scanDirectory.isPending || scanDirectory.isRefetching || scanDirectory.isLoading
+          }
+        >
           <RefreshCcwIcon />
           <span className="sr-only">Refresh the files</span>
         </Button>
@@ -55,7 +46,7 @@ export function SidebarFileTree() {
           <span className="sr-only">Collapse all</span>
         </Button>
       </SidebarMenuItem>
-      <SidebarGroup className="flex-1 overflow-y-auto">
+      <SidebarGroup className="flex-1 overflow-y-auto overflow-x-hidden">
         <SidebarGroupContent>
           <SidebarMenu>
             {scanDirectory.data &&
@@ -83,7 +74,6 @@ function Tree({ item, path = '' }: { item: TreeNode; path?: string }) {
       return;
     }
 
-    // Otherwise, create a new tab
     const fileData: FilePreviewData = {
       path: currentPath,
       name: item.name,
@@ -102,30 +92,26 @@ function Tree({ item, path = '' }: { item: TreeNode; path?: string }) {
     return (
       <SidebarMenuButton
         isActive={false}
-        className="data-[active=true]:bg-transparent"
+        className="overflow-hidden mr-0 pr-0"
         onClick={handleFileClick}
       >
         <FileIcon />
-        {item.name}
+        <span>{item.name}</span>
       </SidebarMenuButton>
     );
   }
 
   return (
-    <SidebarMenuItem>
-      <Collapsible
-        className="group/collapsible [&[data-state=open]>button>svg:first-child]:rotate-90"
-        defaultOpen={item.name === 'components' || item.name === 'ui'}
-      >
+    <SidebarMenuItem className="mr-0">
+      <Collapsible className="[&[data-state=open]>button>svg:first-child]:rotate-90">
         <CollapsibleTrigger asChild>
-          <SidebarMenuButton>
+          <SidebarMenuButton className="overflow-hidden mr-0 pr-0">
             <ChevronRightIcon className="transition-transform" />
-            <FolderIcon />
-            {item.name}
+            <span>{item.name}</span>
           </SidebarMenuButton>
         </CollapsibleTrigger>
         <CollapsibleContent>
-          <SidebarMenuSub>
+          <SidebarMenuSub className="mr-0 pr-0">
             {item.children.map((subItem, index) => (
               <Tree key={index} item={subItem} path={currentPath} />
             ))}

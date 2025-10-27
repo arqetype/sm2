@@ -1,11 +1,6 @@
 import { FileIcon, FolderIcon } from 'lucide-react';
 import type { TabComponentProps } from '@/types/tabs';
-
-export interface FilePreviewData {
-  path: string;
-  name: string;
-  type: 'file' | 'folder';
-}
+import type { FilePreviewData } from './../../../../_shared/types/file-tree';
 
 export function FilePreviewTab({ tabId, data }: TabComponentProps<FilePreviewData>) {
   if (!data) {
