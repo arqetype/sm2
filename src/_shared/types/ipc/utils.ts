@@ -1,13 +1,4 @@
-export interface IpcChannels {
-  ping: {
-    input: void;
-    output: { response: string };
-  };
-  getCityTime: {
-    input: { city: string };
-    output: { city: string; time: string; timezone: string };
-  };
-}
+import { IpcChannels } from '.';
 
 export type IpcChannelNames = keyof IpcChannels;
 

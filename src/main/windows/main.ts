@@ -3,8 +3,10 @@ import { is } from '@electron-toolkit/utils';
 import { join } from 'node:path';
 import { WINDOW_CONFIG } from '../config/app';
 
+export let mainWindow: BrowserWindow;
+
 export function createMainWindow() {
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: WINDOW_CONFIG.DEFAULT_WIDTH,
     height: WINDOW_CONFIG.DEFAULT_HEIGHT,
     minWidth: WINDOW_CONFIG.MIN_WIDTH,

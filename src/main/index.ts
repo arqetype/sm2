@@ -5,7 +5,7 @@ import { registerIpcHandlers } from './ipc';
 
 void app.whenReady().then(() => {
   createMainWindow();
-  registerIpcHandlers();
+  void registerIpcHandlers();
 });
 
 app.on('browser-window-created', (_, window) => {

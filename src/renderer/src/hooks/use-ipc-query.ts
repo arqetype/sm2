@@ -5,7 +5,7 @@ import {
   type UseQueryOptions,
   type UseMutationOptions
 } from '@tanstack/react-query';
-import type { InvokableChannels, IpcInput, IpcOutput } from '../../../_shared/types/ipc';
+import type { InvokableChannels, IpcInput, IpcOutput } from '../../../_shared/types/ipc/utils';
 
 export function useIpcQuery<T extends InvokableChannels>(
   channel: T,

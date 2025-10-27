@@ -14,120 +14,39 @@ import {
   ListCollapseIcon,
   RefreshCcwIcon
 } from 'lucide-react';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 import { useTabs } from '@/hooks/use-tabs';
 import { FilePreviewTab, type FilePreviewData } from '@/components/navigation/tab-file-preview';
-
-type TreeNode =
-  | { type: 'file'; name: string }
-  | { type: 'folder'; name: string; children: TreeNode[] };
-
-const tree: TreeNode[] = [
-  {
-    type: 'folder',
-    name: 'app',
-    children: [
-      {
-        type: 'folder',
-        name: 'api',
-        children: [
-          { type: 'folder', name: 'hello', children: [{ type: 'file', name: 'route.ts' }] },
-          { type: 'file', name: 'page.tsx' },
-          { type: 'file', name: 'layout.tsx' },
-          { type: 'folder', name: 'blog', children: [{ type: 'file', name: 'page.tsx' }] }
-        ]
-      }
-    ]
-  },
-  {
-    type: 'folder',
-    name: 'components',
-    children: [
-      {
-        type: 'folder',
-        name: 'ui',
-        children: [
-          { type: 'file', name: 'button.tsx' },
-          { type: 'file', name: 'card.tsx' }
-        ]
-      },
-      { type: 'file', name: 'header.tsx' },
-      { type: 'file', name: 'footer.tsx' }
-    ]
-  },
-  {
-    type: 'folder',
-    name: 'components',
-    children: [
-      {
-        type: 'folder',
-        name: 'ui',
-        children: [
-          { type: 'file', name: 'button.tsx' },
-          { type: 'file', name: 'card.tsx' }
-        ]
-      },
-      { type: 'file', name: 'header.tsx' },
-      { type: 'file', name: 'footer.tsx' }
-    ]
-  },
-  {
-    type: 'folder',
-    name: 'components',
-    children: [
-      {
-        type: 'folder',
-        name: 'ui',
-        children: [
-          { type: 'file', name: 'button.tsx' },
-          { type: 'file', name: 'card.tsx' }
-        ]
-      },
-      { type: 'file', name: 'header.tsx' },
-      { type: 'file', name: 'footer.tsx' }
-    ]
-  },
-  {
-    type: 'folder',
-    name: 'components',
-    children: [
-      {
-        type: 'folder',
-        name: 'ui',
-        children: [
-          { type: 'file', name: 'button.tsx' },
-          { type: 'file', name: 'card.tsx' }
-        ]
-      },
-      { type: 'file', name: 'header.tsx' },
-      { type: 'file', name: 'footer.tsx' }
-    ]
-  },
-  { type: 'folder', name: 'lib', children: [{ type: 'file', name: 'util.ts' }] },
-  {
-    type: 'folder',
-    name: 'public',
-    children: [
-      { type: 'file', name: 'favicon.ico' },
-      { type: 'file', name: 'vercel.svg' }
-    ]
-  },
-  { type: 'file', name: '.eslintrc.json' },
-  { type: 'file', name: '.gitignore' },
-  { type: 'file', name: 'next.config.js' },
-  { type: 'file', name: 'tailwind.config.js' },
-  { type: 'file', name: 'package.json' },
-  { type: 'file', name: 'README.md' }
-];
+import { useIpcMutation } from '@/hooks/use-ipc-query';
+import { useEffect } from 'react';
+import type { TreeNode } from '../../../../_shared/types/file-tree';
 
 export function SidebarFileTree() {
+  const openDirectory = useIpcMutation('file-tree:open-directory');
+  const scanDirectory = useIpcMutation('file-tree:scan-directory');
+
+  useEffect(() => {
+    if (openDirectory.data && !('error' in openDirectory.data)) {
+      scanDirectory.mutate(openDirectory.data.path);
+    }
+  }, [openDirectory.data]);
+
+  useEffect(() => {
+    console.log(scanDirectory.data);
+  }, [scanDirectory.data]);
+
   return (
     <>
       <SidebarMenuItem className="flex items-center justify-evenly">
-        <Button size="sm" variant={'outline'}>
+        <Button
+          size="sm"
+          variant={'outline'}
+          onClick={() => openDirectory.mutate()}
+          disabled={openDirectory.isPending}
+        >
           Open another folder
         </Button>
-        <Button size="icon-sm">
+        <Button size="icon-sm" disabled={scanDirectory.isPending}>
           <RefreshCcwIcon />
           <span className="sr-only">Refresh the files</span>
         </Button>
@@ -139,9 +58,9 @@ export function SidebarFileTree() {
       <SidebarGroup className="flex-1 overflow-y-auto">
         <SidebarGroupContent>
           <SidebarMenu>
-            {tree.map((item, index) => (
-              <Tree key={index} item={item} />
-            ))}
+            {scanDirectory.data &&
+              !('error' in scanDirectory.data) &&
+              scanDirectory.data.tree.map((item, index) => <Tree key={index} item={item} />)}
           </SidebarMenu>
         </SidebarGroupContent>
       </SidebarGroup>

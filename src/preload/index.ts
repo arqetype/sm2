@@ -7,7 +7,7 @@ import type {
   IpcOutput,
   InvokableChannels,
   SendOnlyChannels
-} from '../_shared/types/ipc';
+} from '../_shared/types/ipc/utils';
 
 const api = {
   invoke: <T extends InvokableChannels>(
