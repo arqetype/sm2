@@ -2,6 +2,7 @@
   "extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
   "include": [
     "electron.vite.config.*",
+    "drizzle.config.ts",
     "eslint.config.ts",
     "prettier.config.ts",
     "vitest.config.ts",
@@ -10,5 +11,8 @@
     "src/preload",
     "src/preload/**/*.d.ts",
     "src/_shared/**/*"
-  ]
+  ],
+  "compilerOptions": {
+    "types": ["node", "vite/client"]
+  }
 }

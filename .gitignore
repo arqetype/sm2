@@ -16,3 +16,6 @@ src/renderer/src/routeTree.gen.ts
 
 # Typescript artifact
 tsconfig.web.tsbuildinfo
+
+# Local development databases
+*.db
