@@ -1,6 +1,6 @@
-import { handleIpc } from '../../lib/helper';
+import { handleIpc } from '@main/utils/ipc';
 import { dialog } from 'electron';
-import { mainWindow } from '../../../windows/main';
+import { mainWindow } from '@main/window';
 
 handleIpc('file-tree:open-directory', async () => {
   try {

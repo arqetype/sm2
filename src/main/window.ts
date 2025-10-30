@@ -1,7 +1,8 @@
+import { join } from 'node:path';
 import { BrowserWindow, shell } from 'electron';
 import { is } from '@electron-toolkit/utils';
-import { join } from 'node:path';
-import { WINDOW_CONFIG } from '../config/app';
+
+import { WINDOW_CONFIG } from '@main/utils/config/app';
 
 export let mainWindow: BrowserWindow;
 

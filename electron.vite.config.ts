@@ -14,15 +14,27 @@ export default defineConfig({
       viteStaticCopy({
         targets: [
           {
-            src: 'src/main/lib/database/generated/**/*',
-            dest: 'lib/database/generated'
+            src: 'src/main/database/generated/**/*',
+            dest: 'database/generated'
           }
         ]
       })
-    ]
+    ],
+    resolve: {
+      alias: {
+        '@main': path.resolve(__dirname, 'src/main'),
+        '@shared': path.resolve(__dirname, 'src/_shared')
+      }
+    }
   },
   preload: {
-    plugins: [externalizeDepsPlugin(), bytecodePlugin()]
+    plugins: [externalizeDepsPlugin(), bytecodePlugin()],
+    resolve: {
+      alias: {
+        '@shared': path.resolve(__dirname, 'src/_shared'),
+        '@preload': path.resolve(__dirname, 'src/preload')
+      }
+    }
   },
   renderer: {
     plugins: [
@@ -32,7 +44,9 @@ export default defineConfig({
       tailwindcss()
     ],
     resolve: {
-      alias: { '@': path.resolve(__dirname, 'src/renderer/src') }
+      alias: {
+        '@': path.resolve(__dirname, 'src/renderer/src')
+      }
     }
   }
 });

@@ -7,7 +7,6 @@ interface LogEntry {
   data?: unknown;
 }
 
-// ANSI color codes
 const colors = {
   reset: '\x1b[0m',
   gray: '\x1b[90m',

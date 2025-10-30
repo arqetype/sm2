@@ -5,7 +5,8 @@
     "src/renderer/**/*.tsx",
     "src/renderer/**/*.d.ts",
     "src/preload/*.d.ts",
-    "src/_shared/**/*"
+    "src/_shared/**/*",
+    "src/main/database/schema.ts"
   ],
   "compilerOptions": {
     "composite": true,

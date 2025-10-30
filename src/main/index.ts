@@ -1,8 +1,9 @@
 import { app, BrowserWindow } from 'electron';
 import { optimizer } from '@electron-toolkit/utils';
-import { createMainWindow } from './windows/main';
-import { registerIpcHandlers } from './ipc';
-import { initDatabase } from './lib/database';
+
+import { createMainWindow } from '@main/window';
+import { registerIpcHandlers } from '@main/handlers';
+import { initDatabase } from '@main/database';
 
 void app.whenReady().then(() => {
   initDatabase();

@@ -1,11 +1,12 @@
-import { scanDirectory } from '../../../services/file-service';
-import { handleIpc } from '../../lib/helper';
+import { scanDirectory } from '@main/features/file-tree/services/file-service';
+import type { TreeNode } from '@shared/types/file-tree';
+import { handleIpc } from '@main/utils/ipc';
 
 handleIpc('file-tree:scan-directory', async (_, path) => {
   if (path === null) return { error: 'No path selected ' };
 
   try {
-    const directory = await scanDirectory(path);
+    const directory: TreeNode = await scanDirectory(path);
 
     if (directory.type === 'file') throw new Error('A file was read');
     return { tree: directory.children };

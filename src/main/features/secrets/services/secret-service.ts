@@ -1,6 +1,6 @@
 import { setPassword, getPassword, deletePassword, findCredentials } from 'keytar';
-import { SECRET_SERVICE_NAME } from '../config/secrets';
-import { type RemoteAiProviderKey, remoteAiProviderKeys } from '../../_shared/config/ai-provider';
+import { SECRET_SERVICE_NAME } from '@main/features/secrets/config';
+import { type RemoteAiProviderKey, remoteAiProviderKeys } from '@shared/config/ai-provider';
 
 export async function saveAiCredentials(
   providerId: RemoteAiProviderKey,

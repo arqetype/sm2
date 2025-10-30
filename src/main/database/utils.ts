@@ -9,7 +9,7 @@ export function createDatabasePath(path: string) {
 }
 
 export function runMigrations() {
-  const path = join(__dirname, './lib/database/generated');
+  const path = join(__dirname, './database/generated');
   migrate(db, {
     migrationsFolder: path
   });

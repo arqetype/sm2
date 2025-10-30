@@ -1,8 +1,9 @@
 import fs from 'node:fs/promises';
 import { basename, extname, join, normalize, resolve, sep } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
-import { TreeNode } from '../../_shared/types/file-tree';
 import { Dirent, Stats } from 'node:fs';
+
+import { TreeNode } from '@shared/types/file-tree';
 
 type VerifyDirectoryReturn = { success: true } | { success: false; message: string };
 
