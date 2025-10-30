@@ -2,8 +2,10 @@ import { app, BrowserWindow } from 'electron';
 import { optimizer } from '@electron-toolkit/utils';
 import { createMainWindow } from './windows/main';
 import { registerIpcHandlers } from './ipc';
+import { initDatabase } from './lib/database';
 
 void app.whenReady().then(() => {
+  initDatabase();
   createMainWindow();
   void registerIpcHandlers();
 });
