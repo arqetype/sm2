@@ -6,6 +6,7 @@ import { AppTitlebar } from '@/components/titlebar/app-titlebar';
 import { createTabStore } from '@/store/tabs';
 import { TabsProvider } from '@/providers/tabs-provider';
 import { TabsRoot } from '@/components/navigation/tabs-root';
+import { AppCommandMenu } from '@/components/command-menu/app-command-menu';
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -146,6 +147,7 @@ function RootComponent() {
             </div>
             <Devtools />
           </TabsRoot>
+          <AppCommandMenu />
         </TabsProvider>
       </SidebarProvider>
     </main>
