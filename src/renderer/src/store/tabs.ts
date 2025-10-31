@@ -12,9 +12,21 @@ interface CreateTabStoreOptions {
 export const createTabStore = (options: CreateTabStoreOptions = {}) => {
   const { initialTabs = [] } = options;
 
+  const tabs =
+    initialTabs.length === 0
+      ? [
+          {
+            id: generateTabId(),
+            title: 'New tab',
+            component: NewTabComponent,
+            closable: true
+          }
+        ]
+      : initialTabs;
+
   return create<TabStore>((set, get) => ({
-    tabs: initialTabs,
-    activeTab: initialTabs[0]?.id || null,
+    tabs,
+    activeTab: tabs[0]?.id || null,
     defaultTabComponent: NewTabComponent,
 
     setActiveTab: (id: string) => {
