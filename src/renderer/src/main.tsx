@@ -1,9 +1,10 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
-import { ErrorBoundaryProvider } from './providers/error';
-import { RouterProvider } from './providers/router';
-import { QueryProvider } from './providers/query';
+import { ErrorBoundaryProvider } from '@/providers/error';
+import { RouterProvider } from '@/providers/router';
+import { QueryProvider } from '@/providers/query';
+import { ToastProvider } from '@/providers/toast';
 
 import './assets/styles/globals.css';
 import './assets/styles/base.css';
@@ -22,9 +23,11 @@ const root = document.getElementById('root')!;
 createRoot(root).render(
   <StrictMode>
     <ErrorBoundaryProvider>
-      <QueryProvider>
-        <RouterProvider />
-      </QueryProvider>
+      <ToastProvider>
+        <QueryProvider>
+          <RouterProvider />
+        </QueryProvider>
+      </ToastProvider>
     </ErrorBoundaryProvider>
   </StrictMode>
 );

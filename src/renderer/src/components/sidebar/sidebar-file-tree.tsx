@@ -13,6 +13,10 @@ import { useTabs } from '@/hooks/use-tabs';
 import { FilePreviewTab } from '@/components/navigation/tab-file-preview';
 import { useIpcMutation, useIpcQuery } from '@/hooks/use-ipc-query';
 import type { TreeNode, FilePreviewData } from '../../../../_shared/types/file-tree';
+import { useSelectedFiles, MAX_SELECTED_FILES } from '@/store/selected-files';
+import { cn } from '@/lib/utils';
+import type { DragEvent } from 'react';
+import { toast } from 'sonner';
 
 export function SidebarFileTree() {
   const openDirectory = useIpcMutation('file-tree:open-directory');
@@ -61,8 +65,10 @@ export function SidebarFileTree() {
 
 function Tree({ item, path = '' }: { item: TreeNode; path?: string }) {
   const { addTab, tabs, setActiveTab } = useTabs();
+  const { addFile, hasFile, isLimitReached } = useSelectedFiles();
 
   const currentPath = path ? `${path}/${item.name}` : item.name;
+  const isSelected = item.type === 'file' && hasFile(currentPath);
 
   const handleFileClick = () => {
     const existingTab = tabs.find(
@@ -89,11 +95,46 @@ function Tree({ item, path = '' }: { item: TreeNode; path?: string }) {
   };
 
   if (item.type === 'file') {
+    const handleDragStart = (e: DragEvent) => {
+      e.dataTransfer.effectAllowed = 'copy';
+      e.dataTransfer.setData(
+        'application/json',
+        JSON.stringify({
+          path: currentPath,
+          name: item.name,
+          type: 'file'
+        })
+      );
+    };
+
+    const handleDragEnd = (e: DragEvent) => {
+      if (e.dataTransfer.dropEffect === 'copy') {
+        if (isLimitReached()) {
+          toast.error(`Maximum file limit reached (${MAX_SELECTED_FILES} files)`, {
+            description: 'Please remove some files before adding new ones.'
+          });
+          return;
+        }
+
+        addFile({
+          path: currentPath,
+          name: item.name,
+          type: 'file'
+        });
+      }
+    };
+
     return (
       <SidebarMenuButton
         isActive={false}
-        className="overflow-hidden mr-0 pr-0"
+        className={cn(
+          'overflow-hidden mr-0 pr-0 cursor-grab active:cursor-grabbing',
+          isSelected && 'bg-primary/10 rounded-l-none border-l-2 border-primary'
+        )}
         onClick={handleFileClick}
+        draggable
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
       >
         <FileIcon />
         <span>{item.name}</span>

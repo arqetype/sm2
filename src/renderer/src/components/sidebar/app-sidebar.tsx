@@ -2,7 +2,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader } from '../ui/sid
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { SidebarProfileInfo } from './sidebar-profile-info';
 import { SidebarFileTree } from './sidebar-file-tree';
-import { SidebarFileDrop } from './sidebar-file-drop';
+import { SidebarDropZone } from './sidebar-file-zone';
 import { SidebarSearchBox } from './sidebar-search-box';
 
 export function AppSidebar() {
@@ -23,7 +23,7 @@ export function AppSidebar() {
           <TabsContent value="decks">Those are your decks</TabsContent>
           <TabsContent value="files" className="flex flex-col justify-between overflow-y-hidden">
             <SidebarFileTree />
-            <SidebarFileDrop />
+            <SidebarDropZone />
           </TabsContent>
         </Tabs>
       </SidebarContent>
