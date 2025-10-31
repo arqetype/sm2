@@ -2,6 +2,7 @@ import { TabsList } from '@/components/navigation/tabs-list';
 import { TitlebarSidebarToggle } from './titlebar-sidebar-toggle';
 import { SIDEBAR_WIDTH, useSidebar } from '../ui/sidebar';
 import { cn } from '@/lib/utils';
+import { ThemeButton } from '@/providers/theme-provider';
 
 const TRAFFIC_LIGHT_WIDTH = '5.2rem';
 
@@ -19,6 +20,7 @@ export function AppTitlebar() {
       >
         <TitlebarSidebarToggle />
         <TabsList />
+        <ThemeButton size="icon-sm" className="not-drag-window mt-0.5 mr-2 ml-3" variant="ghost" />
       </div>
     </div>
   );

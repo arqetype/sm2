@@ -6,7 +6,6 @@ import { AppTitlebar } from '@/components/titlebar/app-titlebar';
 import { createTabStore } from '@/store/tabs';
 import { TabsProvider } from '@/providers/tabs-provider';
 import { TabsRoot } from '@/components/navigation/tabs-root';
-import { useTheme } from '@/hooks/use-theme';
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -14,15 +13,8 @@ export const Route = createRootRoute({
 });
 
 const TempComponent = () => {
-  const { setTheme, theme } = useTheme();
-
-  const handleClick = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
-  };
-
   return (
     <div>
-      <button onClick={handleClick}>Change theme (current {theme})</button>
       <p className="p-4">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sed commodo odio, eget
         hendrerit nisi. Integer massa dui, faucibus ac lobortis ac, sagittis quis velit. Fusce

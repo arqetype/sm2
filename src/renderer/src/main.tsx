@@ -5,6 +5,7 @@ import { ErrorBoundaryProvider } from '@/providers/error';
 import { RouterProvider } from '@/providers/router';
 import { QueryProvider } from '@/providers/query';
 import { ToastProvider } from '@/providers/toast';
+import { ThemeProvider } from '@/providers/theme-provider';
 
 import './assets/styles/globals.css';
 import './assets/styles/base.css';
@@ -23,11 +24,13 @@ const root = document.getElementById('root')!;
 createRoot(root).render(
   <StrictMode>
     <ErrorBoundaryProvider>
-      <ToastProvider>
-        <QueryProvider>
-          <RouterProvider />
-        </QueryProvider>
-      </ToastProvider>
+      <ThemeProvider>
+        <ToastProvider>
+          <QueryProvider>
+            <RouterProvider />
+          </QueryProvider>
+        </ToastProvider>
+      </ThemeProvider>
     </ErrorBoundaryProvider>
   </StrictMode>
 );
