@@ -2,7 +2,7 @@ import { TreeNode } from '../file-tree';
 
 export interface IpcChannels {
   'file-tree:open-directory': {
-    input: void;
+    input: 'initial' | 'action';
     output: { path: string } | { error: string };
   };
   'file-tree:scan-directory': {

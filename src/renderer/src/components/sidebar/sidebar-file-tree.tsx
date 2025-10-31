@@ -11,7 +11,7 @@ import { ChevronRightIcon, FileIcon, ListCollapseIcon, RefreshCcwIcon } from 'lu
 import { Button } from '@/components/ui/button';
 import { useTabs } from '@/hooks/use-tabs';
 import { FilePreviewTab } from '@/components/navigation/tab-file-preview';
-import { useIpcMutation, useIpcQuery } from '@/hooks/use-ipc-query';
+import { useIpcQuery, useMutableIpcQuery } from '@/hooks/use-ipc-query';
 import type { TreeNode, FilePreviewData } from '../../../../_shared/types/file-tree';
 import { useSelectedFiles, MAX_SELECTED_FILES } from '@/store/selected-files';
 import { cn } from '@/lib/utils';
@@ -19,11 +19,15 @@ import type { DragEvent } from 'react';
 import { toast } from 'sonner';
 
 export function SidebarFileTree() {
-  const openDirectory = useIpcMutation('file-tree:open-directory');
+  const openDirectory = useMutableIpcQuery('file-tree:open-directory', 'initial');
   const scanDirectory = useIpcQuery(
     'file-tree:scan-directory',
     openDirectory.data && 'path' in openDirectory.data ? openDirectory.data.path : null
   );
+
+  const handleOpenFolder = () => {
+    void openDirectory.refetchWith('action');
+  };
 
   return (
     <>
@@ -31,7 +35,7 @@ export function SidebarFileTree() {
         <Button
           size="sm"
           variant={'outline'}
-          onClick={() => openDirectory.mutate()}
+          onClick={handleOpenFolder}
           disabled={openDirectory.isPending}
         >
           Open another folder

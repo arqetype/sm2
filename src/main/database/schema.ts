@@ -1,23 +1,15 @@
 import { relations } from 'drizzle-orm';
-import {
-  blob,
-  index,
-  integer,
-  real,
-  sqliteTable,
-  text,
-  uniqueIndex
-} from 'drizzle-orm/sqlite-core';
+import { index, integer, real, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
-export const uiState = sqliteTable(
-  'ui-state',
-  {
-    id: integer().primaryKey({ autoIncrement: true }),
-    name: text(),
-    state: blob({ mode: 'json' })
-  },
-  table => [uniqueIndex('name_idx').on(table.name)]
-);
+export const uiState = sqliteTable('ui-state', {
+  id: integer('id').primaryKey(),
+  width: integer('width').notNull().default(1024),
+  height: integer('height').notNull().default(768),
+  x: integer('x'),
+  y: integer('y'),
+  isMaximised: integer('is_maximised').notNull().default(0),
+  openedFolder: text('opened_folder')
+});
 
 export const decks = sqliteTable('decks', {
   id: integer('id').primaryKey({ autoIncrement: true }),
