@@ -1,4 +1,4 @@
-import { scanDirectory } from '@main/features/file-tree/services/file-service';
+import { scanDirectory } from '@main/features/file-tree/services';
 import type { TreeNode } from '@shared/types/file-tree';
 import { handleIpc } from '@main/utils/ipc';
 

@@ -1,8 +1,10 @@
-import { FileIcon, FolderIcon } from 'lucide-react';
 import type { TabComponentProps } from '@/types/tabs';
 import type { FilePreviewData } from './../../../../_shared/types/file-tree';
+import { useIpcQuery } from '@/hooks/use-ipc-query';
 
-export function FilePreviewTab({ tabId, data }: TabComponentProps<FilePreviewData>) {
+export function FilePreviewTab({ data }: TabComponentProps<FilePreviewData>) {
+  const file = useIpcQuery('file-tree:read-file', { path: data?.path || '' });
+
   if (!data) {
     return (
       <div className="flex items-center justify-center h-full p-8">
@@ -13,61 +15,13 @@ export function FilePreviewTab({ tabId, data }: TabComponentProps<FilePreviewDat
     );
   }
 
-  const { path, name, type } = data;
+  if (!file.data) {
+    return <p>Loading state</p>;
+  }
 
-  return (
-    <div className="h-full overflow-auto p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center gap-4 mb-6">
-          {type === 'file' ? (
-            <FileIcon className="w-12 h-12 text-blue-500" />
-          ) : (
-            <FolderIcon className="w-12 h-12 text-amber-500" />
-          )}
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">{name}</h1>
-            <p className="text-sm text-muted-foreground mt-1">{type}</p>
-          </div>
-        </div>
+  if ('error' in file.data) {
+    return <p>Error: {file.data.error}</p>;
+  }
 
-        <div className="bg-muted/50 rounded-lg p-6 space-y-4">
-          <div>
-            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-2">
-              Path
-            </h2>
-            <code className="block bg-background px-4 py-2 rounded border text-sm font-mono">
-              {path}
-            </code>
-          </div>
-
-          <div>
-            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-2">
-              Details
-            </h2>
-            <div className="bg-background rounded border divide-y">
-              <div className="px-4 py-3 flex justify-between">
-                <span className="text-sm font-medium">Name</span>
-                <span className="text-sm text-muted-foreground">{name}</span>
-              </div>
-              <div className="px-4 py-3 flex justify-between">
-                <span className="text-sm font-medium">Type</span>
-                <span className="text-sm text-muted-foreground capitalize">{type}</span>
-              </div>
-              <div className="px-4 py-3 flex justify-between">
-                <span className="text-sm font-medium">Tab ID</span>
-                <span className="text-sm text-muted-foreground font-mono">{tabId}</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-4">
-            <p className="text-sm text-muted-foreground italic">
-              File preview functionality is currently emulated. In a production environment, this
-              would display the actual file contents, syntax highlighting, and editing capabilities.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  return <pre>{JSON.stringify(file.data)}</pre>;
 }

@@ -21,5 +21,6 @@ export async function updateOpenedDirectory(path: string): Promise<void> {
 
 export async function getOpenedDirectoryOrNull(): Promise<string | null> {
   const result = await db.select().from(uiState).where(eq(uiState.id, 1)).limit(1);
+  if (result.length !== 1) return null;
   return result[0].openedFolder;
 }

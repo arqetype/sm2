@@ -11,6 +11,7 @@ handleIpc('file-tree:open-directory', async (_, input) => {
 
   if (input === 'initial') {
     if (openedDir !== null) return { path: openedDir };
+    else return { error: 'No path was saved before' };
   }
 
   try {
@@ -25,15 +26,11 @@ handleIpc('file-tree:open-directory', async (_, input) => {
     }
 
     const directory = result.filePaths[0];
-
     await updateOpenedDirectory(directory);
 
     return { path: directory };
   } catch (error) {
-    if (error instanceof Error) {
-      return { error: error.message };
-    }
-
+    if (error instanceof Error) return { error: error.message };
     return { error: 'Error while selecting the directory' };
   }
 });

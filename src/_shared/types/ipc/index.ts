@@ -9,4 +9,17 @@ export interface IpcChannels {
     input: string | null;
     output: { tree: TreeNode[] } | { error: string };
   };
+  'file-tree:read-file': {
+    input: { path: string };
+    output:
+      | {
+          content: string;
+          mimeType: string;
+          isText: boolean;
+          encoding: 'utf-8' | 'base64';
+          fileName: string;
+          fileSize: number;
+        }
+      | { error: string };
+  };
 }
