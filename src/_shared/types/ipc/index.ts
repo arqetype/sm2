@@ -1,5 +1,12 @@
 import { TreeNode } from '../file-tree';
 
+export interface FileSearchResult {
+  path: string;
+  name: string;
+  relativePath: string;
+  type: 'file' | 'directory';
+}
+
 export interface IpcChannels {
   'file-tree:open-directory': {
     input: 'initial' | 'action';
@@ -21,5 +28,9 @@ export interface IpcChannels {
           fileSize: number;
         }
       | { error: string };
+  };
+  'file-tree:search-files': {
+    input: { query: string; maxResults?: number };
+    output: { results: FileSearchResult[] } | { error: string };
   };
 }

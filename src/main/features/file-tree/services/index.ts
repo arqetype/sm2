@@ -5,3 +5,5 @@ export { scanDirectory } from './scan/scan-directory';
 
 export { previewFile } from './preview-file';
 export type { FilePreviewResult, FileReadOptions } from './preview-file';
+
+export { searchFiles } from './search-files';
