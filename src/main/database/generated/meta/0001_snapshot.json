@@ -84,16 +84,12 @@
       "indexes": {
         "cards_next_review_idx": {
           "name": "cards_next_review_idx",
-          "columns": [
-            "next_review"
-          ],
+          "columns": ["next_review"],
           "isUnique": false
         },
         "cards_deck_id_idx": {
           "name": "cards_deck_id_idx",
-          "columns": [
-            "deck_id"
-          ],
+          "columns": ["deck_id"],
           "isUnique": false
         }
       },
@@ -102,12 +98,8 @@
           "name": "cards_deck_id_decks_id_fk",
           "tableFrom": "cards",
           "tableTo": "decks",
-          "columnsFrom": [
-            "deck_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["deck_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -227,12 +219,8 @@
           "name": "reviews_card_id_cards_id_fk",
           "tableFrom": "reviews",
           "tableTo": "cards",
-          "columnsFrom": [
-            "card_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["card_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
