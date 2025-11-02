@@ -168,9 +168,7 @@ export const MarkdownPreview = memo(({ data, mode, onModeChange }: MarkdownPrevi
                     {children}
                   </h4>
                 ),
-                p: ({ children }) => (
-                  <p className="leading-7 [&:not(:first-child)]:mt-6">{children}</p>
-                ),
+                p: ({ children }) => <p className="leading-7 not-first:mt-6">{children}</p>,
                 blockquote: ({ children }) => (
                   <blockquote className="mt-6 border-l-2 pl-6 italic">{children}</blockquote>
                 ),

@@ -19,7 +19,7 @@ export const createTabStore = (options: CreateTabStoreOptions = {}) => {
             id: generateTabId(),
             title: 'New tab',
             component: NewTabComponent,
-            closable: true
+            closable: false
           }
         ]
       : initialTabs;
@@ -49,14 +49,20 @@ export const createTabStore = (options: CreateTabStoreOptions = {}) => {
         return '';
       }
 
+      const { tabs } = get();
       const newTab = {
         id: newId,
         closable: true,
         ...tab
       } as Tab;
 
-      set(state => ({
-        tabs: [...state.tabs, newTab],
+      const updatedTabs = tabs.map(t => ({
+        ...t,
+        closable: true
+      }));
+
+      set(() => ({
+        tabs: [...updatedTabs, newTab],
         activeTab: newId
       }));
 
@@ -64,20 +70,47 @@ export const createTabStore = (options: CreateTabStoreOptions = {}) => {
     },
 
     removeTab: (id: string) => {
-      const { tabs, activeTab } = get();
+      const { tabs, activeTab, defaultTabComponent } = get();
       const tab = tabs.find(t => t.id === id);
 
       if (!tab) return false;
       if (tab.closable === false) return false;
-      if (tabs.length === 1) return false;
+
+      // Si c'est le dernier onglet et que c'est un NewTab, empêcher la fermeture
+      if (tabs.length === 1 && tab.component === defaultTabComponent) {
+        return false;
+      }
 
       const idx = tabs.findIndex(t => t.id === id);
       const newTabs = tabs.filter(t => t.id !== id);
 
-      set({
-        tabs: newTabs,
-        activeTab: activeTab === id ? newTabs[Math.min(idx, newTabs.length - 1)].id : activeTab
-      });
+      // Si c'était le dernier onglet, créer un nouvel onglet
+      if (newTabs.length === 0) {
+        const newTabId = generateTabId();
+        const newTab = {
+          id: newTabId,
+          title: 'New tab',
+          component: defaultTabComponent,
+          closable: false
+        };
+
+        set({
+          tabs: [newTab],
+          activeTab: newTabId
+        });
+      } else {
+        // Mettre à jour la propriété closable des onglets restants
+        const updatedTabs = newTabs.map(t => ({
+          ...t,
+          closable: newTabs.length > 1 || t.component !== defaultTabComponent
+        }));
+
+        set({
+          tabs: updatedTabs,
+          activeTab:
+            activeTab === id ? updatedTabs[Math.min(idx, updatedTabs.length - 1)].id : activeTab
+        });
+      }
 
       return true;
     },

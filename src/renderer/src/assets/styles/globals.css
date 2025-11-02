@@ -38,6 +38,21 @@
   --sidebar-ring: oklch(0.8083 0.0174 271.2); /* surface1 */
 
   --tab-curve: 9px;
+
+  --code-rosewater: hsl(11deg, 59%, 67%);
+  --code-flamingo: hsl(0deg, 60%, 67%);
+  --code-pink: hsl(316deg, 73%, 69%);
+  --code-mauve: hsl(266deg, 85%, 58%);
+  --code-red: hsl(347deg, 87%, 44%);
+  --code-maroon: hsl(355deg, 76%, 59%);
+  --code-peach: hsl(22deg, 99%, 52%);
+  --code-yellow: hsl(35deg, 77%, 49%);
+  --code-green: hsl(109deg, 58%, 40%);
+  --code-teal: hsl(183deg, 74%, 35%);
+  --code-sky: hsl(197deg, 97%, 46%);
+  --code-sapphire: hsl(189deg, 70%, 42%);
+  --code-blue: hsl(220deg, 91%, 54%);
+  --code-lavender: hsl(231deg, 97%, 72%);
 }
 
 .dark {
@@ -73,6 +88,21 @@
   --sidebar-accent-foreground: oklch(0.8715 0.0477 273.17); /* text */
   --sidebar-border: oklch(0.426 0.0384 276.84); /* surface1 */
   --sidebar-ring: oklch(0.426 0.0384 276.84); /* surface1 */
+
+  --code-rosewater: hsl(10deg, 58%, 90%);
+  --code-flamingo: hsl(0deg, 58%, 86%);
+  --code-pink: hsl(316deg, 74%, 85%);
+  --code-mauve: hsl(267deg, 83%, 80%);
+  --code-red: hsl(351deg, 74%, 73%);
+  --code-maroon: hsl(355deg, 71%, 77%);
+  --code-peach: hsl(21deg, 86%, 73%);
+  --code-yellow: hsl(40deg, 70%, 78%);
+  --code-green: hsl(105deg, 48%, 72%);
+  --code-teal: hsl(171deg, 47%, 69%);
+  --code-sky: hsl(189deg, 59%, 73%);
+  --code-sapphire: hsl(199deg, 66%, 69%);
+  --code-blue: hsl(220deg, 83%, 75%);
+  --code-lavender: hsl(234deg, 82%, 85%);
 }
 
 @theme inline {
@@ -112,6 +142,20 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-code-rosewater: var(--code-rosewater);
+  --color-code-flamingo: var(--code-flamingo);
+  --color-code-pink: var(--code-pink);
+  --color-code-mauve: var(--code-mauve);
+  --color-code-red: var(--code-red);
+  --color-code-maroon: var(--code-maroon);
+  --color-code-peach: var(--code-peach);
+  --color-code-yellow: var(--code-yellow);
+  --color-code-green: var(--code-green);
+  --color-code-teal: var(--code-teal);
+  --color-code-sky: var(--code-sky);
+  --color-code-sapphire: var(--code-sapphire);
+  --color-code-blue: var(--code-blue);
+  --color-code-lavender: var(--code-lavender);
 }
 
 @layer base {
@@ -131,11 +175,49 @@
   }
 
   .shiki-wrapper pre {
-    @apply p-6 m-0 text-sm font-mono;
+    @apply p-6 m-0 text-sm font-mono relative;
     background-color: transparent !important;
+    tab-size: 2;
+    counter-reset: line;
   }
 
   .shiki-wrapper code {
-    @apply font-mono;
+    @apply font-mono block;
+    display: grid;
+  }
+
+  .shiki-wrapper code .line {
+    position: relative;
+    padding-left: 4rem;
+    min-height: 1.5rem;
+    display: block;
+    padding-right: 1rem;
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    padding-top: 0.125rem;
+    padding-bottom: 0.125rem;
+  }
+
+  .shiki-wrapper code .line::before {
+    content: counter(line);
+    counter-increment: line;
+    position: absolute;
+    left: 0;
+    width: 3rem;
+    text-align: right;
+    padding-right: 1rem;
+    color: var(--muted-foreground);
+    opacity: 0.4;
+    user-select: none;
+    border-right: 1px solid var(--border);
+  }
+
+  .shiki-wrapper code .line:hover {
+    background-color: var(--accent);
+    opacity: 0.5;
+  }
+
+  .shiki-wrapper code .line:hover::before {
+    opacity: 0.8;
   }
 }

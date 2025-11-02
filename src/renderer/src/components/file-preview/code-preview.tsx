@@ -64,11 +64,19 @@ function getCSSVariable(name: string): string {
 function createCustomTheme(): ThemeRegistration {
   const foreground = getCSSVariable('--foreground');
   const mutedForeground = getCSSVariable('--muted-foreground');
-  const primary = getCSSVariable('--primary');
-  const chart1 = getCSSVariable('--chart-1');
-  const chart3 = getCSSVariable('--chart-3');
-  const chart4 = getCSSVariable('--chart-4');
-  const chart5 = getCSSVariable('--chart-5');
+
+  const rosewater = getCSSVariable('--code-rosewater');
+  const pink = getCSSVariable('--code-pink');
+  const mauve = getCSSVariable('--code-mauve');
+  const red = getCSSVariable('--code-red');
+  const peach = getCSSVariable('--code-peach');
+  const yellow = getCSSVariable('--code-yellow');
+  const green = getCSSVariable('--code-green');
+  const teal = getCSSVariable('--code-teal');
+  const sky = getCSSVariable('--code-sky');
+  const sapphire = getCSSVariable('--code-sapphire');
+  const blue = getCSSVariable('--code-blue');
+  const lavender = getCSSVariable('--code-lavender');
 
   return {
     name: 'custom-theme',
@@ -84,43 +92,99 @@ function createCustomTheme(): ThemeRegistration {
       },
       {
         scope: ['string', 'string.quoted'],
-        settings: { foreground: chart5 }
+        settings: { foreground: green }
       },
       {
-        scope: ['keyword', 'storage.type', 'storage.modifier'],
-        settings: { foreground: primary }
+        scope: ['keyword', 'storage.type', 'storage.modifier', 'keyword.control'],
+        settings: { foreground: mauve }
       },
       {
-        scope: ['entity.name.function', 'support.function'],
-        settings: { foreground: chart3 }
+        scope: ['entity.name.function', 'support.function', 'meta.function-call'],
+        settings: { foreground: blue }
       },
       {
         scope: ['constant.numeric', 'constant.language', 'constant.character'],
-        settings: { foreground: chart4 }
+        settings: { foreground: peach }
       },
       {
-        scope: ['variable', 'support.variable'],
+        scope: ['variable', 'support.variable', 'variable.other'],
         settings: { foreground: foreground }
       },
       {
         scope: ['entity.name.type', 'entity.name.class', 'support.type', 'support.class'],
-        settings: { foreground: chart4 }
+        settings: { foreground: yellow }
       },
       {
         scope: ['entity.name.tag'],
-        settings: { foreground: chart1 }
+        settings: { foreground: red }
       },
       {
         scope: ['entity.other.attribute-name'],
-        settings: { foreground: primary }
+        settings: { foreground: mauve }
+      },
+      {
+        scope: ['constant.other.color'],
+        settings: { foreground: pink }
+      },
+      {
+        scope: ['meta.tag', 'punctuation.definition.tag'],
+        settings: { foreground: sky }
+      },
+      {
+        scope: ['entity.other.inherited-class'],
+        settings: { foreground: yellow }
+      },
+      {
+        scope: ['support.constant', 'constant.other'],
+        settings: { foreground: peach }
+      },
+      {
+        scope: ['variable.parameter', 'variable.language'],
+        settings: { foreground: rosewater }
+      },
+      {
+        scope: ['variable.function'],
+        settings: { foreground: blue }
+      },
+      {
+        scope: ['keyword.operator', 'punctuation'],
+        settings: { foreground: sky }
+      },
+      {
+        scope: ['string.regexp'],
+        settings: { foreground: pink }
+      },
+      {
+        scope: ['support.type.property-name'],
+        settings: { foreground: lavender }
+      },
+      {
+        scope: ['markup.heading'],
+        settings: { foreground: red, fontStyle: 'bold' }
       },
       {
         scope: ['markup.bold'],
-        settings: { fontStyle: 'bold' }
+        settings: { foreground: red, fontStyle: 'bold' }
       },
       {
         scope: ['markup.italic'],
-        settings: { fontStyle: 'italic' }
+        settings: { foreground: red, fontStyle: 'italic' }
+      },
+      {
+        scope: ['markup.list'],
+        settings: { foreground: mauve }
+      },
+      {
+        scope: ['markup.quote'],
+        settings: { foreground: teal }
+      },
+      {
+        scope: ['markup.inline.raw', 'markup.fenced_code'],
+        settings: { foreground: green }
+      },
+      {
+        scope: ['meta.link'],
+        settings: { foreground: sapphire }
       }
     ]
   };
@@ -157,7 +221,15 @@ export const CodePreview = memo(({ data, language }: CodePreviewProps) => {
         setIsLoading(true);
         const html = await codeToHtml(content, {
           lang: detectedLanguage,
-          theme: createCustomTheme()
+          theme: createCustomTheme(),
+          defaultColor: false,
+          transformers: [
+            {
+              line(node) {
+                node.properties.class = 'line';
+              }
+            }
+          ]
         });
 
         if (!cancelled) {
