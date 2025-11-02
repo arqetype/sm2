@@ -7,3 +7,12 @@ export interface FilePreviewData {
   name: string;
   type: 'file';
 }
+
+export interface FilePreviewResult {
+  content: string;
+  mimeType: string;
+  isText: boolean;
+  encoding: 'utf-8' | 'base64';
+  fileName: string;
+  fileSize: number;
+}

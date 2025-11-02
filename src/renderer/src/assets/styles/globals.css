@@ -125,4 +125,98 @@
   .bg-vibrancy {
     @apply bg-background/60;
   }
+
+  .shiki-wrapper {
+    @apply overflow-auto;
+  }
+
+  .shiki-wrapper pre {
+    @apply p-6 m-0 text-sm font-mono;
+    background-color: transparent !important;
+  }
+
+  .shiki-wrapper code {
+    @apply font-mono;
+  }
+
+  .prose {
+    @apply text-foreground;
+    max-width: 65ch;
+  }
+
+  .prose :where(h1):not(:where([class~='not-prose'] *)) {
+    @apply text-3xl font-bold mt-8 mb-4;
+  }
+
+  .prose :where(h2):not(:where([class~='not-prose'] *)) {
+    @apply text-2xl font-bold mt-6 mb-3;
+  }
+
+  .prose :where(h3):not(:where([class~='not-prose'] *)) {
+    @apply text-xl font-bold mt-5 mb-2;
+  }
+
+  .prose :where(h4):not(:where([class~='not-prose'] *)) {
+    @apply text-lg font-semibold mt-4 mb-2;
+  }
+
+  .prose :where(p):not(:where([class~='not-prose'] *)) {
+    @apply my-4 leading-7;
+  }
+
+  .prose :where(a):not(:where([class~='not-prose'] *)) {
+    @apply text-primary underline underline-offset-4 hover:text-primary/80;
+  }
+
+  .prose :where(strong):not(:where([class~='not-prose'] *)) {
+    @apply font-bold;
+  }
+
+  .prose :where(code):not(:where([class~='not-prose'] *)) {
+    @apply bg-muted px-1.5 py-0.5 rounded text-sm font-mono;
+  }
+
+  .prose :where(pre):not(:where([class~='not-prose'] *)) {
+    @apply bg-muted p-4 rounded-lg overflow-x-auto my-4;
+  }
+
+  .prose :where(pre code):not(:where([class~='not-prose'] *)) {
+    @apply bg-transparent p-0;
+  }
+
+  .prose :where(blockquote):not(:where([class~='not-prose'] *)) {
+    @apply border-l-4 border-muted-foreground/30 pl-4 italic my-4;
+  }
+
+  .prose :where(ul):not(:where([class~='not-prose'] *)) {
+    @apply list-disc pl-6 my-4 space-y-2;
+  }
+
+  .prose :where(ol):not(:where([class~='not-prose'] *)) {
+    @apply list-decimal pl-6 my-4 space-y-2;
+  }
+
+  .prose :where(li):not(:where([class~='not-prose'] *)) {
+    @apply my-1;
+  }
+
+  .prose :where(table):not(:where([class~='not-prose'] *)) {
+    @apply w-full border-collapse my-4;
+  }
+
+  .prose :where(th):not(:where([class~='not-prose'] *)) {
+    @apply border border-border bg-muted px-4 py-2 text-left font-semibold;
+  }
+
+  .prose :where(td):not(:where([class~='not-prose'] *)) {
+    @apply border border-border px-4 py-2;
+  }
+
+  .prose :where(hr):not(:where([class~='not-prose'] *)) {
+    @apply border-border my-8;
+  }
+
+  .prose :where(img):not(:where([class~='not-prose'] *)) {
+    @apply rounded-lg my-4;
+  }
 }
