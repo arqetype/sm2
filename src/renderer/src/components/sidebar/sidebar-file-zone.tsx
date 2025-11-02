@@ -29,14 +29,6 @@ export function SidebarDropZone() {
     setIsDragOver(false);
   };
 
-  const handleGenerateCards = () => {
-    console.log('Generate cards for:', selectedFiles);
-  };
-
-  const handleCreateCardsManually = () => {
-    console.log('Create cards manually:');
-  };
-
   const visibleFiles = showAll ? selectedFiles : selectedFiles.slice(-2);
   const hiddenCount = selectedFiles.length - visibleFiles.length;
 
@@ -64,7 +56,7 @@ export function SidebarDropZone() {
         </div>
         <Dialog>
           <DialogTrigger asChild={true}>
-            <Button className="w-full" onClick={handleCreateCardsManually} variant="outline">
+            <Button className="w-full" variant="outline">
               Manually create cards
             </Button>
           </DialogTrigger>
@@ -137,7 +129,6 @@ export function SidebarDropZone() {
               {hiddenCount} more file{hiddenCount > 1 ? 's' : ''}
             </Button>
           )}
-
           {showAll && (
             <Button
               variant="ghost"
@@ -150,14 +141,9 @@ export function SidebarDropZone() {
           )}
         </div>
       </div>
-
       <Dialog>
         <DialogTrigger asChild={true}>
-          <Button
-            className="w-full"
-            onClick={handleGenerateCards}
-            disabled={selectedFiles.length === 0}
-          >
+          <Button className="w-full" disabled={selectedFiles.length === 0}>
             <SparklesIcon />
             Create new cards
           </Button>
